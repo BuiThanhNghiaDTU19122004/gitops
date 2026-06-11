@@ -385,11 +385,8 @@ Mở Prometheus:
 http://localhost:9090/alerts
 ```
 
-Cần thấy ít nhất một alert của `api-slo` ở trạng thái `FIRING`, ví dụ `ApiFastBurnRate` hoặc `ApiSlowBurnRate`.
-
-Chụp thêm email cá nhân nhận được từ Alertmanager.
+Email cá nhân nhận được từ Alertmanager.
 
 ```markdown
-![Evidence 10a - Alert firing](evidence/11a-alert-firing.png)
 ![Evidence 10b - Alert email](evidence/11b-alert-email.png)
 ```
