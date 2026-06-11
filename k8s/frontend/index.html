@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chợ Cá Tươi</title>
+  <title>Cho Ca Tuoi</title>
   <style>
     :root {
       color: #17324d;
@@ -234,57 +234,57 @@
   <header class="topbar">
     <div class="brand">
       <span class="mark">CA</span>
-      <span>Chợ Cá Tươi</span>
+      <span>Cho Ca Tuoi</span>
     </div>
-    <nav class="nav" aria-label="Khu vực cửa hàng">
-      <span>Hải sản mới về</span>
-      <span>Bảng giá</span>
-      <span>Đặt hàng nhanh</span>
+    <nav class="nav" aria-label="Khu vuc cua hang">
+      <span>Hai san moi ve</span>
+      <span>Bang gia</span>
+      <span>Dat hang nhanh</span>
     </nav>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">Mở cửa từ 5:00 sáng mỗi ngày</p>
-        <h1>Xin chào mừng đến với chợ cá tươi ven biển</h1>
+        <p class="eyebrow">Mo cua tu 5:00 sang moi ngay</p>
+        <h1>Xin chao mung den voi cho ca tuoi ven bien</h1>
         <p class="intro">
-          Cá mới đánh bắt, hải sản được ướp lạnh tại quầy, chọn món nào cân ngay món đó.
-          Ghé quầy sớm để lấy phần cá ngon nhất cho bữa cơm hôm nay.
+          Ca moi danh bat, hai san duoc uop lanh tai quay, chon mon nao can ngay mon do.
+          Ghe quay som de lay phan ca ngon nhat cho bua com hom nay.
         </p>
         <div class="actions">
-          <button id="call-api">Xem tình trạng quầy</button>
-          <span class="status">Sẵn sàng nhận đơn cá tươi hôm nay</span>
+          <button id="call-api">Xem tinh trang quay</button>
+          <span class="status">San sang nhan don ca tuoi hom nay</span>
         </div>
       </div>
 
-      <div class="market-scene" aria-label="Quầy chợ cá với cá tươi và bảng giá">
+      <div class="market-scene" aria-label="Quay cho ca voi ca tuoi va bang gia">
         <aside class="price-board">
-          <h2>Bảng giá hôm nay</h2>
-          <div class="price-row"><span>Cá ngừ</span><strong>120k/kg</strong></div>
-          <div class="price-row"><span>Cá thu</span><strong>160k/kg</strong></div>
-          <div class="price-row"><span>Mực tươi</span><strong>180k/kg</strong></div>
-          <div class="price-row"><span>Tôm biển</span><strong>220k/kg</strong></div>
+          <h2>Bang gia hom nay</h2>
+          <div class="price-row"><span>Ca ngu</span><strong>120k/kg</strong></div>
+          <div class="price-row"><span>Ca thu</span><strong>160k/kg</strong></div>
+          <div class="price-row"><span>Muc tuoi</span><strong>180k/kg</strong></div>
+          <div class="price-row"><span>Tom bien</span><strong>220k/kg</strong></div>
         </aside>
       </div>
     </section>
 
-    <section class="tiles" aria-label="Dịch vụ của chợ cá">
+    <section class="tiles" aria-label="Dich vu cua cho ca">
       <article class="tile">
-        <h3>Cá về mỗi sáng</h3>
-        <p>Hàng được phân loại tại quầy, ưu tiên độ tươi và nguồn gốc rõ ràng.</p>
+        <h3>Ca ve moi sang</h3>
+        <p>Hang duoc phan loai tai quay, uu tien do tuoi va nguon goc ro rang.</p>
       </article>
       <article class="tile">
-        <h3>Làm sạch tại chỗ</h3>
-        <p>Hỗ trợ đánh vảy, cắt khúc, đóng gói để mang về nấu ngay.</p>
+        <h3>Lam sach tai cho</h3>
+        <p>Ho tro danh vay, cat khuc, dong goi de mang ve nau ngay.</p>
       </article>
       <article class="tile">
-        <h3>Nhận đơn nhanh</h3>
-        <p>Quầy luôn sẵn sàng kiểm tra hàng còn trong ngày và báo lại ngay.</p>
+        <h3>Nhan don nhanh</h3>
+        <p>Quay luon san sang kiem tra hang con trong ngay va bao lai ngay.</p>
       </article>
     </section>
 
-    <pre id="result">Bấm "Xem tình trạng quầy" để kiểm tra hôm nay.</pre>
+    <pre id="result">Bam "Xem tinh trang quay" de kiem tra hom nay.</pre>
   </main>
 
   <script>
@@ -292,13 +292,13 @@
     const result = document.querySelector("#result");
 
     button.addEventListener("click", async () => {
-      result.textContent = "Đang kiểm tra tình trạng quầy...";
+      result.textContent = "Dang kiem tra tinh trang quay...";
 
       try {
         const response = await fetch("/api");
         result.textContent = await response.text();
       } catch (error) {
-        result.textContent = `Không kiểm tra được tình trạng quầy: ${error.message}`;
+        result.textContent = `Khong kiem tra duoc tinh trang quay: ${error.message}`;
       }
     });
   </script>
