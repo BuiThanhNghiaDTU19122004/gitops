@@ -94,16 +94,12 @@ kubectl -n demo run load --image=busybox --restart=Never -- sh -c "while true; d
 
 ### Evidence 1 - Argo CD Applications
 
-```markdown
+
 ![Evidence 1 - Argo CD apps](evidence/01-argocd-apps.png)
-```
 
 ### Evidence 2 - Prometheus target đã scrape API
 
-
-```markdown
 ![Evidence 2 - Prometheus targets](evidence/02-prometheus-targets.png)
-```
 
 ### Evidence 3 - Prometheus query có dữ liệu
 
@@ -113,10 +109,7 @@ Chạy query:
 flask_http_request_total{namespace="demo", app="api"}
 ```
 
-
-```markdown
 ![Evidence 3 - Prometheus query](evidence/03-prometheus-query.png)
-```
 
 ### Evidence 4 - Kubernetes resources trong namespace demo
 
@@ -151,9 +144,8 @@ Cần thấy:
 - Bước canary 25% hoặc 50%.
 
 
-```markdown
+
 ![Evidence 5 - Canary rollout](evidence/05-canary-rollout.png)
-```
 
 ### Evidence 6 - AnalysisRun thành công với bản tốt
 
@@ -267,9 +259,8 @@ kubectl -n demo describe analysisrun
 
 Auto abort output:
 
-```markdown
+
 ![Evidence 7 - Auto abort](evidence/07-auto-abort.png)
-```
 
 ### Evidence 8 - PrometheusRule
 
@@ -365,9 +356,8 @@ Cần thấy:
 - Stable image quay lại bản tốt.
 - Thời gian từ lúc revert đến lúc healthy nhỏ hơn 5 phút.
 
-```markdown
+
 ![Evidence 09 - Git revert rollback](evidence/10-git-revert-rollback.png)
-```
 
 ### Evidence 10 - Alert fire và gửi email
 
@@ -385,6 +375,5 @@ http://localhost:9090/alerts
 
 Email cá nhân nhận được từ Alertmanager.
 
-```markdown
+
 ![Evidence 10b - Alert email](evidence/11b-alert-email.png)
-```
