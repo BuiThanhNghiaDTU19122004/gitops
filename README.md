@@ -126,8 +126,6 @@ Chạy:
 kubectl -n demo get rollout,pod,svc,endpoints,servicemonitor,analysistemplate,prometheusrule
 ```
 
-
-
 ![Evidence 4 - Kubernetes resources trong namespace demo](evidence/04-resources-demo.png)
 
 ### Evidence 5 - Canary rollout đang chạy
