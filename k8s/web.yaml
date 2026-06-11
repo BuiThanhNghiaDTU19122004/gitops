@@ -1,23 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: python:3.12-alpine
+          command:
+            - python
+            - /app/server.py
+          env:
+            - name: PORT
+              value: "8080"
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+          volumeMounts:
+            - name: backend-source
+              mountPath: /app/server.py
+              subPath: server.py
+      volumes:
+        - name: backend-source
+          configMap:
+            name: backend-source
+---
 apiVersion: v1
-kind: ConfigMap   # v1, wave 0
-metadata: { name: web-config, namespace: demo,
-  annotations: { argocd.argoproj.io/sync-wave: "0" } }
-data: { MESSAGE: "hello from gitops" }
+kind: Service
+metadata:
+  name: backend
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  selector:
+    app: backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
 ---
 apiVersion: apps/v1
-kind: Deployment   # apps/v1, wave 1
-metadata: { name: web, namespace: demo,
-  annotations: { argocd.argoproj.io/sync-wave: "1" } }
+kind: Deployment
+metadata:
+  name: web
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
-  replicas: 2
-  selector: { matchLabels: { app: web } }
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
   template:
-    metadata: { labels: { app: web } }
-    spec: { containers: [ { name: web, image: nginx:1.27,
-      envFrom: [ { configMapRef: { name: web-config } } ] } ] }
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+          volumeMounts:
+            - name: web-static
+              mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+            - name: web-nginx
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
+      volumes:
+        - name: web-static
+          configMap:
+            name: web-static
+        - name: web-nginx
+          configMap:
+            name: web-nginx
 ---
 apiVersion: v1
-kind: Service   # v1, wave 2
-metadata: { name: web, namespace: demo,
-  annotations: { argocd.argoproj.io/sync-wave: "2" } }
-spec: { selector: { app: web }, ports: [ { port: 80, targetPort: 80 } ] }
+kind: Service
+metadata:
+  name: web
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cho Ca Tuoi</title>
+  <style>
+    :root {
+      color: #17324d;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #edf7f9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background:
+        linear-gradient(180deg, rgba(11, 119, 145, 0.18), rgba(237, 247, 249, 0.92) 42%),
+        #edf7f9;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px clamp(20px, 5vw, 56px);
+      background: rgba(255, 255, 255, 0.82);
+      border-bottom: 1px solid rgba(23, 50, 77, 0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: #0b7791;
+      color: #ffffff;
+      font-weight: 900;
+    }
+
+    .nav {
+      display: flex;
+      gap: 18px;
+      color: #46637d;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    main {
+      width: min(1120px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 42px 0 36px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      align-items: center;
+      gap: 28px;
+    }
+
+    .hero-copy {
+      padding: 16px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 14px;
+      color: #0b7791;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 720px;
+      margin: 0 0 16px;
+      color: #10283f;
+      font-size: clamp(40px, 7vw, 72px);
+      line-height: 1;
+    }
+
+    .intro {
+      max-width: 640px;
+      margin: 0 0 24px;
+      color: #46637d;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      background: #e85d3f;
+      color: #ffffff;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 800;
+      padding: 13px 18px;
+      box-shadow: 0 12px 22px rgba(232, 93, 63, 0.22);
+    }
+
+    .status {
+      color: #46637d;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .market-scene {
+      position: relative;
+      min-height: 390px;
+      border: 1px solid rgba(23, 50, 77, 0.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(150deg, rgba(255, 255, 255, 0.78), rgba(210, 235, 239, 0.7)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='620' viewBox='0 0 900 620'%3E%3Crect width='900' height='620' fill='%23d8edf1'/%3E%3Cpath d='M0 430 C140 390 220 462 360 420 C500 378 620 392 760 430 C830 449 872 448 900 435 L900 620 L0 620 Z' fill='%2386c7d4'/%3E%3Cpath d='M0 500 C128 455 258 530 388 480 C548 419 695 510 900 452 L900 620 L0 620 Z' fill='%230b7791' opacity='.78'/%3E%3Cpath d='M80 140 L225 140 L290 300 L25 300 Z' fill='%23ffffff' opacity='.9'/%3E%3Cpath d='M100 170 L225 170 L250 245 L70 245 Z' fill='%23e85d3f' opacity='.85'/%3E%3Cpath d='M600 135 L760 135 L835 315 L530 315 Z' fill='%23ffffff' opacity='.86'/%3E%3Cpath d='M628 172 L765 172 L796 258 L585 258 Z' fill='%23f2b84b' opacity='.88'/%3E%3Cg fill='%23f5f7fb'%3E%3Cellipse cx='180' cy='432' rx='66' ry='22'/%3E%3Cpath d='M228 432 L280 400 L280 464 Z'/%3E%3Ccircle cx='140' cy='426' r='5' fill='%2310283f'/%3E%3Cellipse cx='530' cy='458' rx='82' ry='27'/%3E%3Cpath d='M592 458 L652 420 L652 496 Z'/%3E%3Ccircle cx='482' cy='451' r='6' fill='%2310283f'/%3E%3Cellipse cx='680' cy='390' rx='58' ry='19'/%3E%3Cpath d='M722 390 L767 363 L767 417 Z'/%3E%3Ccircle cx='646' cy='385' r='5' fill='%2310283f'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: cover;
+      box-shadow: 0 18px 48px rgba(23, 50, 77, 0.16);
+    }
+
+    .price-board {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      width: min(300px, calc(100% - 36px));
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(23, 50, 77, 0.12);
+      padding: 18px;
+    }
+
+    .price-board h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 9px 0;
+      border-top: 1px solid #d8e4ec;
+      color: #46637d;
+      font-weight: 700;
+    }
+
+    .price-row strong {
+      color: #0b7791;
+    }
+
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .tile {
+      min-height: 126px;
+      border: 1px solid rgba(23, 50, 77, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.86);
+      padding: 18px;
+    }
+
+    .tile h3 {
+      margin: 0 0 8px;
+      color: #10283f;
+      font-size: 18px;
+    }
+
+    .tile p {
+      margin: 0;
+      color: #5d7388;
+      line-height: 1.55;
+    }
+
+    pre {
+      min-height: 92px;
+      overflow: auto;
+      margin: 26px 0 0;
+      border-radius: 8px;
+      background: #10283f;
+      color: #dff6fb;
+      padding: 16px;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 820px) {
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .market-scene {
+        min-height: 330px;
+      }
+
+      .tiles {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">CA</span>
+      <span>Cho Ca Tuoi</span>
+    </div>
+    <nav class="nav" aria-label="Khu vuc cua hang">
+      <span>Hai san moi ve</span>
+      <span>Bang gia</span>
+      <span>Dat hang nhanh</span>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Mo cua tu 5:00 sang moi ngay</p>
+        <h1>Xin chao mung den voi cho ca tuoi ven bien</h1>
+        <p class="intro">
+          Ca moi danh bat, hai san duoc uop lanh tai quay, chon mon nao can ngay mon do.
+          Ghe quay som de lay phan ca ngon nhat cho bua com hom nay.
+        </p>
+        <div class="actions">
+          <button id="call-api">Xem tinh trang quay</button>
+          <span class="status">San sang nhan don ca tuoi hom nay</span>
+        </div>
+      </div>
+
+      <div class="market-scene" aria-label="Quay cho ca voi ca tuoi va bang gia">
+        <aside class="price-board">
+          <h2>Bang gia hom nay</h2>
+          <div class="price-row"><span>Ca ngu</span><strong>120k/kg</strong></div>
+          <div class="price-row"><span>Ca thu</span><strong>160k/kg</strong></div>
+          <div class="price-row"><span>Muc tuoi</span><strong>180k/kg</strong></div>
+          <div class="price-row"><span>Tom bien</span><strong>220k/kg</strong></div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="tiles" aria-label="Dich vu cua cho ca">
+      <article class="tile">
+        <h3>Ca ve moi sang</h3>
+        <p>Hang duoc phan loai tai quay, uu tien do tuoi va nguon goc ro rang.</p>
+      </article>
+      <article class="tile">
+        <h3>Lam sach tai cho</h3>
+        <p>Ho tro danh vay, cat khuc, dong goi de mang ve nau ngay.</p>
+      </article>
+      <article class="tile">
+        <h3>Nhan don nhanh</h3>
+        <p>Quay luon san sang kiem tra hang con trong ngay va bao lai ngay.</p>
+      </article>
+    </section>
+
+    <pre id="result">Bam "Xem tinh trang quay" de kiem tra hom nay.</pre>
+  </main>
+
+  <script>
+    const button = document.querySelector("#call-api");
+    const result = document.querySelector("#result");
+
+    button.addEventListener("click", async () => {
+      result.textContent = "Dang kiem tra tinh trang quay...";
+
+      try {
+        const response = await fetch("/api");
+        result.textContent = await response.text();
+      } catch (error) {
+        result.textContent = `Khong kiem tra duoc tinh trang quay: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
