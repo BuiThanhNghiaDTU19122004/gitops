@@ -80,6 +80,16 @@ Load generator dùng để tạo traffic cho Prometheus:
 kubectl -n demo run load --image=busybox --restart=Never -- sh -c "while true; do wget -qO- http://api.demo.svc.cluster.local:8080/; sleep 1; done"
 ```
 
+## Đối chiếu yêu cầu chấm
+
+| Yêu cầu | Trạng thái | Evidence |
+| --- | --- | --- |
+| Thay đổi qua Git, Argo CD `Synced`, reproduce được từ Git | Đã có | Evidence 1 |
+| `git revert` rollback dưới 5 phút | Cần bổ sung ảnh/output | Evidence 10 |
+| Có SLO + alert fire về email cá nhân khi inject lỗi | Có rule; cần bổ sung ảnh alert/email | Evidence 8, Evidence 11 |
+| Canary bản lỗi tự abort về bản cũ | Đã có | Evidence 7 |
+| Repo có `Rollout`, `AnalysisTemplate`, SLO/alert qua Git | Đã có | Evidence 4, Evidence 8 |
+
 ## Evidence
 
 ### Evidence 1 - Argo CD Applications
@@ -333,23 +343,53 @@ spec:
         severity: warning
 ```
 
-### Evidence 9 - Xóa resource sau demo
+### Evidence 09 - Rollback bằng git revert dưới 5 phút
 
-Chạy:
+Sau khi deploy bản lỗi, rollback bằng Git:
 
 ```powershell
-kubectl -n demo delete pod load --ignore-not-found
-kubectl -n argocd delete application root api web monitoring-extras kube-prometheus-stack argo-rollouts --ignore-not-found
-kubectl delete namespace demo monitoring argo-rollouts --ignore-not-found
+git log --oneline -3
+git revert HEAD
+git push
 ```
 
-Kiểm tra:
+Kiểm tra Argo CD và Rollout sau rollback:
 
 ```powershell
 kubectl -n argocd get applications
-kubectl get namespace demo monitoring argo-rollouts
+kubectl argo rollouts get rollout api -n demo
 ```
 
+Cần thấy:
+
+- Commit lỗi đã được revert.
+- App `api` quay về `Synced/Healthy`.
+- Stable image quay lại bản tốt.
+- Thời gian từ lúc revert đến lúc healthy nhỏ hơn 5 phút.
+
 ```markdown
-![Evidence 9 - Cleanup resources](evidence/09-cleanup-resources.png)
+![Evidence 09 - Git revert rollback](evidence/10-git-revert-rollback.png)
+```
+
+### Evidence 10 - Alert fire và gửi email
+
+Sau khi inject lỗi, kiểm tra alert:
+
+```powershell
+kubectl -n monitoring port-forward svc/kube-prometheus-stack-prometheus 9090:9090
+```
+
+Mở Prometheus:
+
+```text
+http://localhost:9090/alerts
+```
+
+Cần thấy ít nhất một alert của `api-slo` ở trạng thái `FIRING`, ví dụ `ApiFastBurnRate` hoặc `ApiSlowBurnRate`.
+
+Chụp thêm email cá nhân nhận được từ Alertmanager.
+
+```markdown
+![Evidence 10a - Alert firing](evidence/11a-alert-firing.png)
+![Evidence 10b - Alert email](evidence/11b-alert-email.png)
 ```
