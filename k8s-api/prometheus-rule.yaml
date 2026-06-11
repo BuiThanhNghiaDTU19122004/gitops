@@ -1,0 +1,49 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: api-slo
+  namespace: demo
+  labels:
+    app: api
+spec:
+  groups:
+    - name: api-slo
+      rules:
+        - alert: ApiFastBurnRate
+          expr: |
+            (
+              sum(rate(flask_http_request_total{namespace="demo", app="api", status=~"5.."}[5m]))
+              /
+              clamp_min(sum(rate(flask_http_request_total{namespace="demo", app="api"}[5m])), 1)
+            ) > 0.072
+            and
+            (
+              sum(rate(flask_http_request_total{namespace="demo", app="api", status=~"5.."}[1h]))
+              /
+              clamp_min(sum(rate(flask_http_request_total{namespace="demo", app="api"}[1h])), 1)
+            ) > 0.072
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: API fast burn rate is too high
+            description: API is burning the 99.5 percent availability error budget too quickly.
+        - alert: ApiSlowBurnRate
+          expr: |
+            (
+              sum(rate(flask_http_request_total{namespace="demo", app="api", status=~"5.."}[30m]))
+              /
+              clamp_min(sum(rate(flask_http_request_total{namespace="demo", app="api"}[30m])), 1)
+            ) > 0.03
+            and
+            (
+              sum(rate(flask_http_request_total{namespace="demo", app="api", status=~"5.."}[6h]))
+              /
+              clamp_min(sum(rate(flask_http_request_total{namespace="demo", app="api"}[6h])), 1)
+            ) > 0.03
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: API slow burn rate is elevated
+            description: API is steadily consuming the 99.5 percent availability error budget.

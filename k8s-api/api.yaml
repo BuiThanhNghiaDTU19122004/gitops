@@ -18,9 +18,24 @@ spec:
         readinessProbe: { httpGet: { path: /healthz, port: 8080 } }
   strategy:
     canary:                  # Lab 4 dùng tới
-      steps: [ { setWeight: 25 }, { pause: {} },
-               { setWeight: 50 }, { pause: { duration: 30s } },
-               { setWeight: 100 } ]
+      steps:
+      - setWeight: 25
+      - pause: { duration: 60s }
+      - analysis:
+          templates:
+          - templateName: api-success-rate
+          args:
+          - name: service-name
+            value: api
+      - setWeight: 50
+      - pause: { duration: 60s }
+      - analysis:
+          templates:
+          - templateName: api-success-rate
+          args:
+          - name: service-name
+            value: api
+      - setWeight: 100
 ---
 apiVersion: v1
 kind: Service
