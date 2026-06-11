@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata: { name: kube-prometheus-stack, namespace: argocd }
+spec:
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: argo-rollouts
+    targetRevision: 2.37.7
+    helm: { values: |    # repo: + ruleSelector, grafana adminPassword
+      prometheus: { prometheusSpec: { serviceMonitorSelectorNilUsesHelmValues: false } } }
+  destination: { server: https://kubernetes.default.svc, namespace: argo-rollouts }
+  syncPolicy: { automated: { prune: true, selfHeal: true },
+                syncOptions: [CreateNamespace=true, ServerSideApply=true] }
