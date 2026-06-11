@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: kube-prometheus-stack
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   project: default
   source:
@@ -11,12 +13,41 @@ spec:
     targetRevision: 65.1.1
     helm:
       values: |
+        grafana:
+          adminPassword: admin123
+
         prometheus:
           prometheusSpec:
             serviceMonitorSelectorNilUsesHelmValues: false
             serviceMonitorNamespaceSelector: {}
             ruleSelectorNilUsesHelmValues: false
             ruleNamespaceSelector: {}
+
+        alertmanager:
+          config:
+            global:
+              resolve_timeout: 5m
+              smtp_smarthost: smtp.gmail.com:587
+              smtp_from: ezpark01092025@gmail.com
+              smtp_auth_username: ezpark01092025@gmail.com
+              smtp_auth_password_file: /etc/alertmanager/secrets/alertmanager-smtp/smtp-password
+              smtp_require_tls: true
+            route:
+              receiver: email
+              group_by:
+                - alertname
+                - namespace
+              group_wait: 30s
+              group_interval: 5m
+              repeat_interval: 2h
+            receivers:
+              - name: email
+                email_configs:
+                  - to: ezpark01092025@gmail.com
+                    send_resolved: true
+          alertmanagerSpec:
+            secrets:
+              - alertmanager-smtp
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring

@@ -10,9 +10,12 @@ Lab này triển khai một API Flask bằng Argo Rollouts, expose metric `/metr
 GitHub repo gitops
   -> Argo CD root Application
   -> argocd/apps/
+     -> monitoring-extras
      -> argo-rollouts
      -> kube-prometheus-stack
      -> api
+  -> monitoring/
+     -> Alertmanager SMTP secret
   -> k8s-api/
      -> Rollout api
      -> Service api
@@ -29,10 +32,12 @@ Argo Rollouts query Prometheus để quyết định promote hoặc abort
 | Thành phần | File | Vai trò |
 | --- | --- | --- |
 | Root app | `argocd/root.yaml` | App-of-apps, đọc các Application con trong `argocd/apps` |
+| Monitoring extras | `argocd/apps/monitoring-extras.yaml`, `monitoring/` | Tạo namespace/secret SMTP cho Alertmanager |
 | Argo Rollouts | `argocd/apps/argo-rollouts.yaml` | Cài controller Rollout và CRD |
-| Prometheus stack | `argocd/apps/kube-prometheus-stack.yaml` | Cài Prometheus, Grafana, Alertmanager |
+| Prometheus stack | `argocd/apps/kube-prometheus-stack.yaml` | Cài Prometheus, Grafana, Alertmanager và receiver email |
 | API app | `argocd/apps/api.yaml` | Argo CD Application trỏ tới `k8s-api` |
 | Rollout + Service | `k8s-api/api.yaml` | Chạy API bằng canary strategy và expose Service `api` |
+| Mini FE/BE demo | `app/app.py`, `app/templates/counter.html` | FE ở `/app`, BE counter API ở `/api/status` và `/api/counter` |
 | ServiceMonitor | `k8s-api/servicemonitor.yaml` | Cho Prometheus scrape `api:8080/metrics` |
 | AnalysisTemplate | `k8s-api/analysis-template.yaml` | Query Prometheus, success rate phải >= 95% |
 | PrometheusRule | `k8s-api/prometheus-rule.yaml` | Tạo alert burn-rate cho SLO 99.5% |
@@ -41,13 +46,14 @@ Argo Rollouts query Prometheus để quyết định promote hoặc abort
 
 Sau khi sync thành công:
 
-- Argo CD hiển thị `root`, `api`, `argo-rollouts`, `kube-prometheus-stack` là `Healthy`.
+- Argo CD hiển thị `root`, `monitoring-extras`, `api`, `argo-rollouts`, `kube-prometheus-stack` là `Healthy`.
 - Prometheus `Status -> Targets` có target `serviceMonitor/demo/api/0`.
 - Target API có state `UP`.
 - Query Prometheus `flask_http_request_total{namespace="demo", app="api"}` trả về dữ liệu.
 - Rollout `api` có 4 replicas ready.
 - Khi deploy bản mới, rollout đi qua 25% -> analysis -> 50% -> analysis -> 100%.
 - Khi deploy bản lỗi, analysis fail và rollout bị abort.
+- Khi inject lỗi đủ lâu, `PrometheusRule` fire và Alertmanager gửi email.
 
 ## Chuẩn bị image API
 
@@ -65,12 +71,49 @@ kind load docker-image w9-api:1
 
 Nếu không dùng kind, push image lên registry và sửa `image:` trong `k8s-api/api.yaml`.
 
+## Cấu hình email Alertmanager
+
+Trước khi sync phần monitoring, thay placeholder bằng thông tin email thật:
+
+- `argocd/apps/kube-prometheus-stack.yaml`
+  - `CHANGE_ME_EMAIL@gmail.com`
+- `monitoring/alertmanager-smtp-secret.yaml`
+  - `CHANGE_ME_APP_PASSWORD`
+
+Với Gmail, giá trị `smtp-password` nên là App Password, không dùng mật khẩu đăng nhập chính.
+
+## Kiểm tra mini FE/BE
+
+App vẫn giữ các endpoint cũ `/`, `/healthz` và `/metrics`. Backend route nằm trong `app/app.py`, giao diện demo nằm ở `app/templates/counter.html` và được mở qua `/app`; nút bấm trên giao diện gọi backend API để tăng bộ đếm in-memory.
+
+Port-forward Service API:
+
+```powershell
+kubectl -n demo port-forward svc/api 8080:8080
+```
+
+Mở giao diện:
+
+```text
+http://localhost:8080/app
+```
+
+Kiểm tra backend counter API:
+
+```powershell
+curl http://localhost:8080/api/status
+curl http://localhost:8080/api/counter
+curl -X POST http://localhost:8080/api/counter
+```
+
+Lưu ý: vì Rollout đang chạy nhiều replica, bộ đếm demo này là in-memory theo từng pod, không phải dữ liệu dùng chung toàn cluster.
+
 ## Deploy qua GitOps
 
 Commit và push thay đổi lên repo GitHub:
 
 ```powershell
-git add argocd/apps/argo-rollouts.yaml argocd/apps/kube-prometheus-stack.yaml k8s-api/api.yaml k8s-api/servicemonitor.yaml k8s-api/analysis-template.yaml k8s-api/prometheus-rule.yaml README.md
+git add .gitignore argocd/apps/monitoring-extras.yaml argocd/apps/argo-rollouts.yaml argocd/apps/kube-prometheus-stack.yaml monitoring k8s-api/api.yaml k8s-api/servicemonitor.yaml k8s-api/analysis-template.yaml k8s-api/prometheus-rule.yaml README.md
 git commit -m "complete lab 5 observability canary"
 git push
 ```
@@ -78,6 +121,7 @@ git push
 Sau đó vào Argo CD và sync `root`, hoặc sync riêng các app:
 
 - `argo-rollouts`
+- `monitoring-extras`
 - `kube-prometheus-stack`
 - `api`
 

@@ -1,0 +1,51 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+venv/
+.venv/
+env/
+.env
+.env.*
+
+# Build and package output
+dist/
+build/
+*.egg-info/
+
+# Logs and temp files
+*.log
+*.tmp
+tmp/
+temp/
+
+# Local Kubernetes/GitOps overrides
+*.local.yaml
+*.local.yml
+kubeconfig
+kubeconfig.*
+
+# Terraform leftovers if infra files are added later
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+secrets/
+monitoring/alertmanager-smtp-secret.yaml
