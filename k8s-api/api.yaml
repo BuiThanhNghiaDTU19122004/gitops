@@ -9,12 +9,12 @@ spec:
     spec:
       containers:
       - name: api
-        image: w9-api:1
+        image: w9-api:2
         imagePullPolicy: IfNotPresent
         ports: [ { name: http, containerPort: 8080 } ]
         env:
         - { name: ERROR_RATE, value: "0" }
-        - { name: VERSION,    value: "v1" }
+        - { name: VERSION,    value: "v2" }
         readinessProbe: { httpGet: { path: /healthz, port: 8080 } }
   strategy:
     canary:                  # Lab 4 dùng tới
