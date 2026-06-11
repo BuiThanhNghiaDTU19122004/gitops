@@ -1,0 +1,5 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ServiceMonitor       # Prometheus scrape /metrics
+spec:
+  selector: { matchLabels: { app: api } }
+  endpoints: [ { port: http, path: /metrics, interval: 15s } ]
