@@ -9,32 +9,35 @@ spec:
     spec:
       containers:
       - name: api
-        image: w9-api:2
+        image: w9-api:3
         imagePullPolicy: IfNotPresent
         ports: [ { name: http, containerPort: 8080 } ]
         env:
-        - { name: ERROR_RATE, value: "0" }
-        - { name: VERSION,    value: "v2" }
+        - { name: ERROR_RATE, value: "0.8" }
+        - { name: VERSION,    value: "v3" }
         readinessProbe: { httpGet: { path: /healthz, port: 8080 } }
   strategy:
-    canary:                  # Lab 4 dùng tới
-      steps:
-      - setWeight: 25
-      - pause: { duration: 60s }
-      - analysis:
-          templates:
-          - templateName: api-success-rate
-          args:
-          - name: service-name
-            value: api
-      - setWeight: 50
-      - pause: { duration: 60s }
-      - analysis:
-          templates:
-          - templateName: api-success-rate
-          args:
-          - name: service-name
-            value: api
+    # canary:                  # Lab 4 dùng tới
+    #   steps:
+    #   - setWeight: 25
+    #   - pause: { duration: 60s }
+    #   - analysis:
+    #       templates:
+    #       - templateName: api-success-rate
+    #       args:
+    #       - name: service-name
+    #         value: api
+    #   - setWeight: 50
+    #   - pause: { duration: 60s }
+    #   - analysis:
+    #       templates:
+    #       - templateName: api-success-rate
+    #       args:
+    #       - name: service-name
+    #         value: api
+    #   - setWeight: 100
+  canary:
+    steps:
       - setWeight: 100
 ---
 apiVersion: v1
