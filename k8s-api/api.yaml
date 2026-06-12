@@ -36,9 +36,9 @@ spec:
     #       - name: service-name
     #         value: api
     #   - setWeight: 100
-  canary:
-    steps:
-      - setWeight: 100
+    canary:
+      steps:
+        - setWeight: 100
 ---
 apiVersion: v1
 kind: Service
