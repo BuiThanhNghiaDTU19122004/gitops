@@ -372,8 +372,9 @@ Mở Prometheus:
 ```text
 http://localhost:9090/alerts
 ```
+Alert ApiFastBurnRate trên Prometheus
+![Evidence 10b - Alert email](evidence/11a-apifastburnrate-firing.png)
 
 Email cá nhân nhận được từ Alertmanager.
-
 
 ![Evidence 10b - Alert email](evidence/11b-alert-email.png)
